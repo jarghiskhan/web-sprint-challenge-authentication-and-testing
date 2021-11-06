@@ -1,7 +1,22 @@
 const router = require('express').Router();
+const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
+const { JWT_SECRET } = require("../secret/index");
+const Users = require("../users/users-model");
+const {checkPayload, checkUsernameExistsinDB, checkUsernameTaken}  = require("../auth/auth-middleware")
 
-router.post('/register', (req, res) => {
-  res.end('implement register, please!');
+function makeToken(user){
+  const payload={
+    subject: user.user_id,
+    username: user.username,
+  }
+  const options = {
+    expiresIn:"1d"
+  }
+  return jwt.sign(payload,JWT_SECRET,options)
+}
+
+router.post('/register', checkPayload, checkUsernameTaken, async (req, res) => {
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
@@ -27,10 +42,20 @@ router.post('/register', (req, res) => {
     4- On FAILED registration due to the `username` being taken,
       the response body should include a string exactly as follows: "username taken".
   */
+      try {
+        const hash = bcrypt.hashSync(req.body.password, 8);
+        const newUser = await Users.add({
+          username: req.body.username,
+          password: hash,
+        })
+        res.status(201).json(newUser);
+      } catch (e) {
+        res.status(500).json(`Server error: ${e.message}`);
+      }
 });
 
-router.post('/login', (req, res) => {
-  res.end('implement login, please!');
+router.post('/login', checkPayload, checkUsernameExistsinDB, (req, res) => {
+  console.log(req.userData);
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
