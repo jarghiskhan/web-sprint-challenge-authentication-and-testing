@@ -54,6 +54,15 @@ Your finished project must include all of the following requirements (further in
 Be prepared to demonstrate your understanding of this week's concepts by answering questions on the following topics.
 
 1. Differences between using _sessions_ or _JSON Web Tokens_ for authentication.
+    -sessions are stateful authentication and are handled by the server.
+    -json web tokens are stateless authentication and handled by the client
 2. What does `bcryptjs` do to help us store passwords in a secure manner?
+    -helps us hash and compare passwords using various methods within the library.
 3. How are unit tests different from integration and end-to-end testing?
+    -Unit tests, are testing the functionality of chuncks of written code. 
+    -Integration tests, test how individual software modules are combined and behave as a group
+    -End-to-end testing is most representative to how an end-user would test/use the app.
 4. How does _Test Driven Development_ change the way we write applications and tests?
+    -Aids in stable code.
+    -Allows the new code to meet QA requirements
+    -Reduces manual regression testing and prevents errors from getting inserted into the code.
